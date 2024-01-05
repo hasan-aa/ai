@@ -33,6 +33,12 @@ export type UseAssistantHelpers = {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 
   /**
+   * Load a thread's messages by its ID.
+   * @param threadId
+   */
+  loadThread: (threadId?: string) => Promise<void>;
+
+  /**
    * Handler for the `onChange` event of the input field to control the input's value.
    */
   handleInputChange: (
