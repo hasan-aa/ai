@@ -1219,7 +1219,7 @@ function experimental_useAssistant({
     setThreadId(threadId2);
     setMessages([]);
     setInput("");
-    return callApi("loadPreviousMessages", threadId2);
+    return callApi(threadId2, "loadPreviousMessages");
   };
   return {
     messages,

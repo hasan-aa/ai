@@ -225,7 +225,7 @@ export function experimental_useAssistant({
     setMessages([]);
     setInput('');
 
-    return callApi('loadPreviousMessages', threadId);
+    return callApi(threadId,'loadPreviousMessages');
   };
 
 
