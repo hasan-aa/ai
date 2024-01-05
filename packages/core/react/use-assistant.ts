@@ -28,6 +28,11 @@ export type UseAssistantHelpers = {
   setInput: React.Dispatch<React.SetStateAction<string>>;
 
   /**
+   * setState-powered method to update the messages.
+   */
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+
+  /**
    * Handler for the `onChange` event of the input field to control the input's value.
    */
   handleInputChange: (
@@ -89,12 +94,12 @@ export type UseAssistantOptions = {
 };
 
 export function experimental_useAssistant({
-  api,
-  threadId: threadIdParam,
-  credentials,
-  headers,
-  body,
-}: UseAssistantOptions): UseAssistantHelpers {
+                                            api,
+                                            threadId: threadIdParam,
+                                            credentials,
+                                            headers,
+                                            body,
+                                          }: UseAssistantOptions): UseAssistantHelpers {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [threadId, setThreadId] = useState<string | undefined>(undefined);
@@ -129,6 +134,10 @@ export function experimental_useAssistant({
     ]);
 
     setInput('');
+    return callApi();
+  };
+
+  const callApi = async (_threadId, action?: string) => {
 
     const result = await fetch(api, {
       method: 'POST',
@@ -137,11 +146,12 @@ export function experimental_useAssistant({
       body: JSON.stringify({
         ...body,
         // always use user-provided threadId when available:
-        threadId: threadIdParam ?? threadId ?? null,
+        threadId: _threadId ?? threadIdParam ?? threadId ?? null,
         message: input,
 
         // optional request data:
         data: requestOptions?.data,
+        action: action,
       }),
     });
 
@@ -204,12 +214,22 @@ export function experimental_useAssistant({
 
     setStatus('awaiting_message');
   };
+  const loadThread = async (threadId = threadIdParam) => {
+    setThreadId(threadId);
+    setMessages([]);
+    setInput('');
+
+    return callApi('loadPreviousMessages', threadId);
+  };
+
 
   return {
     messages,
     threadId,
     input,
     setInput,
+    setMessages,
+    loadThread,
     handleInputChange,
     submitMessage,
     status,
