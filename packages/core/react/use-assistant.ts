@@ -143,7 +143,7 @@ export function experimental_useAssistant({
     return callApi(undefined, undefined, requestOptions?.data);
   };
 
-  const callApi = async (_threadId?:string, action?: string,data?:Record<string, string>) => {
+  const callApi = async (_threadId?: string, action?: string, data?: Record<string, string>) => {
 
     const result = await fetch(api, {
       method: 'POST',
@@ -201,8 +201,12 @@ export function experimental_useAssistant({
             // set id of last message:
             setMessages(messages => {
               const lastMessage = messages[messages.length - 1];
-              lastMessage.id = value.messageId;
-              return [...messages.slice(0, messages.length - 1), lastMessage];
+              if (lastMessage) {
+                lastMessage.id = value.messageId;
+                return [...messages.slice(0, messages.length - 1), lastMessage];
+              }else {
+                return messages;
+              }
             });
 
             break;
@@ -225,7 +229,7 @@ export function experimental_useAssistant({
     setMessages([]);
     setInput('');
 
-    return callApi(threadId,'loadPreviousMessages');
+    return callApi(threadId, 'loadPreviousMessages');
   };
 
 

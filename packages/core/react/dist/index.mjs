@@ -1162,8 +1162,12 @@ function experimental_useAssistant({
             setThreadId(value.threadId);
             setMessages((messages2) => {
               const lastMessage = messages2[messages2.length - 1];
-              lastMessage.id = value.messageId;
-              return [...messages2.slice(0, messages2.length - 1), lastMessage];
+              if (lastMessage) {
+                lastMessage.id = value.messageId;
+                return [...messages2.slice(0, messages2.length - 1), lastMessage];
+              } else {
+                return messages2;
+              }
             });
             break;
           }
