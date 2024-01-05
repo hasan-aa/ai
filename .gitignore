@@ -3,7 +3,9 @@ node_modules
 .turbo
 *.log
 .next
-dist
+#dist
+#skip react/dist
+!react/dist
 dist-ssr
 *.local
 .env

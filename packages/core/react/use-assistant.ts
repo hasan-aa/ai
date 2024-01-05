@@ -140,10 +140,10 @@ export function experimental_useAssistant({
     ]);
 
     setInput('');
-    return callApi();
+    return callApi(undefined, undefined, requestOptions?.data);
   };
 
-  const callApi = async (_threadId, action?: string) => {
+  const callApi = async (_threadId?:string, action?: string,data?:Record<string, string>) => {
 
     const result = await fetch(api, {
       method: 'POST',
@@ -156,7 +156,7 @@ export function experimental_useAssistant({
         message: input,
 
         // optional request data:
-        data: requestOptions?.data,
+        data,
         action: action,
       }),
     });
